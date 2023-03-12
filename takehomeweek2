@@ -1,0 +1,315 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.Design;
+using System.Xml.Serialization;
+
+public class Car
+{
+    private string carmake;
+    private string carmodel;
+    private int caryear;
+    private double carprice;
+    private string cartype;
+
+    public void Info()
+    {
+        Console.WriteLine("car make: " + carmake);
+        Console.WriteLine("car model: " + carmodel);
+        Console.WriteLine("car year: " + caryear);
+        Console.WriteLine("car price: " + carprice);
+        Console.WriteLine("car type: " + cartype);
+    }
+
+    public string Make
+    {
+        get { return carmake; }
+        set { carmake = value; }
+    }
+
+    public string Model
+    {
+        get { return carmodel; }
+        set { carmodel = value; }
+    }
+    public int Year
+    {
+        get { return caryear; }
+        set { caryear = value; }
+    }
+
+    public double Price
+    {
+        get { return carprice; }
+        set { carprice = value; }
+    }
+    public string Type
+    {
+        get { return cartype; }
+        set { cartype = value; }
+    }
+
+}
+
+public class ElectricCar : Car
+{
+    private int carbatterycapacity;
+    public int BatteryCapacity
+    {
+        get { return carbatterycapacity; }
+        set { carbatterycapacity = value; }
+    }
+}
+
+public class HybridCar : Car
+{
+    private int cargastanksize;
+    private int carbatterycapacity;
+
+    public int GasTankSize
+    {
+        get { return cargastanksize; }
+        set { cargastanksize = value; }
+    }
+    public int BatteryCapacity
+    {
+        get { return carbatterycapacity; }
+        set { carbatterycapacity = value; }
+    }
+}
+
+public class GasolineCar : Car
+{
+    private int cargastanksize;
+    public int GasTankSize
+    {
+        get { return cargastanksize; }
+        set { cargastanksize = value; }
+    }
+}
+
+public class Dealership : Car
+{
+    private string name;
+    private string location;
+    public List<Car> listofcar = new List<Car>();
+    public List<Sale> listofsold = new List<Sale>();
+    public string Name
+    {
+        get { return name; }
+        set { name = value; }
+    }
+    public string Location
+    {
+        get { return location; }
+        set { location = value; }
+    }
+    public void AddCar(Car mobil)
+    {
+        listofcar.Add(mobil);
+    }
+    public void RemoveCar(string carMake, string carModel)
+    {
+        foreach (Car a in listofcar)
+        {
+            if (a.Make.Equals(carMake) && (a.Model.Equals(carModel)))
+            {
+                listofcar.Remove(a);
+                break;
+            }
+        }
+
+    }
+    public void Showlist()
+    {
+        foreach (Car b in listofcar)
+        {
+            b.Info();
+        }
+    }
+    public void MakeSale(Sale sale)
+    {
+        foreach (Car c in listofcar)
+        {
+            if (c.Equals(sale.carsold))
+            {
+                listofcar.Remove(c);
+                listofsold.Add(sale);
+                break;
+            }
+        }
+    }
+    public void PrintSales()
+    {
+        foreach (Sale d in listofsold)
+        {
+            d.Infosold();
+        }
+    }
+    public class Sale
+    {
+        private string CustomerName;
+        private Car Carsold;
+        private double PricePaid;
+        private string carMake;
+        private string carModel;
+
+        public string customername
+        {
+            get { return CustomerName; }
+            set { CustomerName = value; }
+        }
+        public Car carsold
+        {
+            get { return Carsold; }
+            set { Carsold = value; }
+        }
+        public double pricepaid
+        {
+            get { return PricePaid; }
+            set { PricePaid = value; }
+        }
+        public string carmake
+        {
+            get { return carMake; }
+            set { carMake = value; }
+        }
+        public string carmodel
+        {
+            get { return carModel; }
+            set { carModel = value; }
+        }
+        public void Infosold()
+        {
+            Console.WriteLine("customer name: " + customername);
+            Console.WriteLine("cars sold: " + carsold);
+            Console.WriteLine("Price Paid: " + pricepaid);
+            Console.WriteLine("carmake: " + carmake);
+            Console.WriteLine("carmodel: " + carmodel);
+        }
+
+    }
+}
+
+class program
+{
+    public static void Main(string[] args)
+    {
+        int menu;
+        int choice;
+        Dealership dealership = new Dealership();
+        Console.Write("Add name of the dealership: ");
+        dealership.Name = Console.ReadLine();
+        Console.Write("Add the location of the dealership: ");
+        dealership.Location = Console.ReadLine();
+    menu:
+        Console.WriteLine("1.Add car ");
+        Console.WriteLine("2.Remove car");
+        Console.WriteLine("3.Show car list in the dealership");
+        Console.WriteLine("4.Make Sales");
+        Console.WriteLine("5.Print sales history");
+        Console.WriteLine("6.Exit");
+        menu = Convert.ToInt32(Console.ReadLine());
+        while (menu != 6)
+        {
+            if (menu == 1)
+            {
+                Console.WriteLine("1.Electric Car");
+                Console.WriteLine("2.Hybrid Car");
+                Console.WriteLine("3.Gasoline Car");
+                choice = Convert.ToInt32(Console.ReadLine());
+                if (choice == 1)
+                {
+                    ElectricCar electriccar = new ElectricCar();
+                    Console.WriteLine("Add car make : ");
+                    electriccar.Make = Console.ReadLine();
+                    dealership.AddCar(electriccar);
+                    Console.WriteLine("Add car model:");
+                    electriccar.Model = Console.ReadLine();
+                    Console.WriteLine("Add car Year:");
+                    electriccar.Year = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Add Price: ");
+                    electriccar.Price = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Add car battery capacity: ");
+                    electriccar.BatteryCapacity = Convert.ToInt32(Console.ReadLine());
+                    electriccar.Type = ("electric car");
+                    goto menu;
+                }
+                else if (choice == 2)
+                {
+                    HybridCar hybridcar = new HybridCar();
+                    Console.WriteLine("Add car make : ");
+                    hybridcar.Make = Console.ReadLine();
+                    dealership.AddCar(hybridcar);
+                    Console.WriteLine("Add car model:");
+                    hybridcar.Model = Console.ReadLine();
+                    Console.WriteLine("Add car Year:");
+                    hybridcar.Year = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Add Price: ");
+                    hybridcar.Price = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Add car battery capacity: ");
+                    hybridcar.BatteryCapacity = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Add gas tank size: ");
+                    hybridcar.GasTankSize = Convert.ToInt32(Console.ReadLine());
+                    hybridcar.Type = ("hybrid car");
+                    goto menu;
+                }
+                else if (choice == 3)
+                {
+                    GasolineCar gasolinecar = new GasolineCar();
+                    Console.WriteLine("Add car make : ");
+                    gasolinecar.Make = Console.ReadLine();
+                    dealership.AddCar(gasolinecar);
+                    Console.WriteLine("Add car model:");
+                    gasolinecar.Model = Console.ReadLine();
+                    Console.WriteLine("Add car Year:");
+                    gasolinecar.Year = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Add Price: ");
+                    gasolinecar.Price = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Add gas tank size: ");
+                    gasolinecar.GasTankSize = Convert.ToInt32(Console.ReadLine());
+                    gasolinecar.Type = ("gasoline car");
+                    goto menu;
+                }
+            }
+            else if (menu == 2)
+            {
+                Console.WriteLine("enter car make:");
+                string carmake = Console.ReadLine();
+                Console.WriteLine("enter car model:");
+                string carmodel = Console.ReadLine();
+                dealership.RemoveCar(carmake, carmodel);
+                goto menu;
+            }
+            else if (menu == 3)
+            {
+                dealership.Showlist();
+                goto menu;
+            }
+            else if (menu == 4)
+            {
+                Dealership.Sale sale = new Dealership.Sale();
+                Console.WriteLine("Add customer name: ");
+                sale.customername = Console.ReadLine();
+                Console.WriteLine("Add car make: ");
+                sale.carmake = Console.ReadLine();
+                Console.WriteLine("Add car model ");
+                sale.carmodel = Console.ReadLine();
+                Console.WriteLine("Car price :");
+                sale.pricepaid = Convert.ToDouble(Console.ReadLine());
+                foreach (Car mobiltype in dealership.listofcar)
+                {
+                    if (sale.carmake == (mobiltype.Make) && sale.carmodel == (mobiltype.Model))
+                    {
+                        sale.carsold = mobiltype;
+                    }
+                }
+                dealership.MakeSale(sale);
+                goto menu;
+            }
+            else if (menu == 5)
+            {
+                dealership.PrintSales();
+                goto menu;
+            }
+        }
+    }
+}
